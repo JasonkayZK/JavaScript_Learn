@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script> -->
+</head>
+
+<body>
+    <p>v-for: item in items 列表</p>
+    <div>
+        <ul id="app-0">
+            <li v-for="item in items">
+                {{item.message}}
+            </li>   
+        </ul>
+    </div>
+
+    <br /><br />
+    <p>v-for: (item, index) 列表</p>
+    <div>
+        <ul id="app-1">
+            <li v-for="(item, index) in items">
+                {{parentMessage}} - {{index}} - {{item.message}}
+            </li>
+        </ul>
+    </div>
+
+    <br /><br />
+    <p>v-for: (value) in Object</p>
+
+
+    <br /><br />
+    <p>v-for: (value, name) in Object</p>
+
+    <br /><br />
+    <p>v-for: (value, name, index) in Object</p>
+    <div id="app-2">
+        <ul>
+            <li v-for="(value, name, index) in Object">
+                {{name}} - {{index}} - {{value}}
+            </li>
+        </ul>
+    </div>
+
+    <br /><br />
+    <p>对象变更检测注意事项</p>
+    <div id="app-3">
+        <ul>
+            <li  v-for="(value, name, index) in object">
+                {{index}}. {{name}}: {{value}}
+            </li>
+        </ul>
+        <button @click="addElem">添加元素</button>
+    </div>
+
+    <br /><br />
+    <p>显示过滤/排序后的结果</p>
+    <div id="app-4">
+        <ul>
+            <li v-for="n in evenNumbers">{{n}}</li>
+        </ul>
+    </div>
+
+    <br /><br />
+    <p>显示过滤/排序后的结果</p>
+    <div id="app-5">
+        <span v-for="n in 10">{{n}}<br /></span>
+    </div>
+
+    <br /><br />
+    <p>v-for 与 v-if 一同使用</p>
+    <div id="app-6">
+        <ul v-if="todos.length">
+            <li v-for="todo in todos" v-if="!todo.isComplete">
+                {{todo}}
+            </li>
+        </ul>
+        <p v-else>No todos left!</p>
+    </div>
+
+    <br /><br />
+    <p>在组件上使用 v-for</p>
+    <div id="app-7">
+        <form @submit.prevent="addNewTodo">
+            <label for="new-todo">Add a todo</label>
+            <input
+                v-model="newTodoText"
+                id="new-todo"
+                placeholder="E.g. Feet cat"
+            >
+            <button>Add</button>
+        </form>
+        <ul>
+            <li is="todo-item"
+                v-for="(todo, index) in todos"
+                :key="todo.id"
+                :title="todo.title"
+                @remove="todos.splice(index, 1)"
+            ></li>
+        </ul>
+    </div>
+
+</body>
+
+<script>
+    var app0 = new Vue({
+        el: '#app-0',
+        data: {
+            items: [
+                {message: 'Foo'},
+                {message: 'Bar'}
+            ]
+        }
+    })
+
+    var app1 = new Vue({
+        el: '#app-1',
+        data: {
+            parentMessage: 'Parent',
+            items: [
+                {message: 'Foo'},
+                {message: 'Bar'}
+            ]
+        }
+    })
+
+    var app2 = new Vue({
+        el: '#app-2',
+        data: {
+            Object: {
+                title: 'How to do',
+                authod: 'ZK',
+                publish: '2019'
+            }
+        }
+    })
+
+    var app3 = new Vue({
+        el: "#app-3",
+        data: {
+            object: {
+                name: "zk"
+            }
+        },
+        methods: {
+            addElem: function() {
+                Vue.set(this.object, 'age', 18)
+            }
+        }
+    })
+
+    var app4 = new Vue({
+        el: '#app-4',
+        data: {
+            numbers: [1,2,3,4,5]
+        },
+        computed: {
+            evenNumbers: function() {
+                return this.numbers.filter(function (number) {
+                    return number % 2 === 0
+                })
+            }
+        }
+    })
+
+    var app5 = new Vue({
+        el: '#app-5'
+    })
+
+    var app6 = new Vue({
+        el: '#app-6',
+        data: {
+            todos: [
+                {apple: 'good', isComplete: false},
+                {banana: 'haha', isComplete: true}
+            ],
+
+        }
+    })
+
+
+    Vue.component('todo-item', {
+        template: '<li>{{ title }}<button @click="$emit(\'remove\')">Remove</button></li>',
+        props: ['title']
+    })
+    var app7 = new Vue({
+        el: '#app-7',
+        data: {
+            newTodoText: '',
+            todos: [
+                {
+                    id: 1,
+                    title: 'Do dishes'
+                },
+                {
+                    id: 2,
+                    title: 'Mow lawn'
+                }
+            ],
+            nextTodoId: 3
+        },
+        methods: {
+            addNewTodo: function() {
+                this.todos.push({
+                    id: this.nextTodoId++,
+                    title: this.newTodoText
+                })
+                this.newTodoText = ''
+            }
+        }
+    })
+    
+</script>

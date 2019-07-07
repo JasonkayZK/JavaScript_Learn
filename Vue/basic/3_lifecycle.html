@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app-0">
+        <p>{{a}}</p>
+        <button v-on:click="add">点击加一</button>
+    </div>
+</body>
+
+<script>
+    new Vue({
+        el: '#app-0',
+        data: {
+            a: 1
+        },
+        created: function (){
+            console.log('created a: ' + this.a)
+        },
+        mounted: function() {
+            console.log('mounted a: ' + this.a)
+        },
+        updated: function() {
+            console.log('updated a:' + this.a)
+        },
+        destroyed: function() {
+            console.log('destroyed a:' + this.a)
+        },
+        methods: {
+            add: function() {
+                this.a += 1
+            }
+        }
+    })
+</script>

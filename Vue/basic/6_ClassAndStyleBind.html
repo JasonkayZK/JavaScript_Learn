@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script> -->
+</head>
+<body>
+
+    <p>多个class切换</p>
+    <div id="app-0" class="static" :class="{active: isActive, 'text-danger': hasError}">
+        Content
+        <p><button @click="active">active</button>  <button @click="error">error</button></p>
+    </div>
+
+    <br /><br />
+    <p>绑定对象class</p>
+    <div id="app-1" :class="classObject">
+        Context
+        <p><button @click="active">active</button>  <button @click="error">error</button></p>
+    </div>
+
+    <br /><br />
+    <p>绑定组件</p>
+    <div>
+        <my-component class="baz boo"></my-component>
+    </div>
+    
+    <br /><br />
+    <p>绑定内联样式</p>
+    <div id="app-3" :style="{color: activeColor, fontSize: fontSize + 'px'}">
+        content
+    </div>
+
+    <br /><br />
+    <p>绑定内联样式到对象</p>
+    <div id="app-4" :style="styleObject">
+        Content
+    </div>
+
+
+</body>
+
+<style>
+    .active {
+        font-size: 100px
+    }
+
+    .text-danger {
+        background-color: red
+    }
+
+</style>
+
+<script>
+    var app0 = new Vue({
+        el: '#app-0',
+        data: {
+            isActive: true,
+            hasError: false
+        },
+        methods: {
+            active: function() {
+                this.isActive = !this.isActive
+            },
+            error: function() {
+                this.hasError = !this.hasError
+            }
+        }
+    })
+
+    var app1 = new Vue({
+        el: '#app-1',
+        data: {
+            error2: null,
+            classObject: {
+                active: true, 
+                'text-danger': this.error2
+            }
+        },
+        methods: {
+            active: function() {
+                this.classObject.active = !this.classObject.active
+            },
+            error: function() {
+                this.error2 = !this.error2
+            }
+        }        
+    })
+
+    Vue.component('my-component', {
+        template: '<p class="foo bar">Hi</p>'
+    })
+    var app2 = new Vue({
+        el: 'my-component'
+    })
+
+    var app3 = new Vue({
+        el: '#app-3',
+        data: {
+            activeColor: 'red',
+            fontSize: 30
+        }
+    })
+
+    var app4 = new Vue({
+        el: '#app-4',
+        data: {
+            styleObject: {
+                color: 'red',
+                fontSize: '13px'
+            }
+        }
+    })
+
+
+</script>

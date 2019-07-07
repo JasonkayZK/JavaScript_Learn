@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script> -->
+</head>
+
+<body>
+    <p>基本事件处理</p>
+    <div id="app-0">
+        <button @click="greet">Greet</button>
+    </div>
+
+    <br/><br/>
+    <p>内联处理器中的方法</p>
+    <div id="app-1">
+        <button @click="say('HI', $event)">Hi</button>
+        <button @click="say('what', $event)">what</button>
+    </div>
+
+    <br/><br/>
+    <p>事件修饰符</p>
+
+    <br/><br/>
+    <p>按键修饰符</p>
+    <input id="app-2" v-model="content" @keyup.enter.exact="show" />
+
+    <br/><br/>
+    <p>鼠标按钮修饰符</p>    
+    <div id="app-3" @click.left="show">
+        Click
+    </div>
+
+
+
+</body>
+
+<script>
+    var app0 = new Vue({
+        el: '#app-0',
+        data: {
+            name: 'Vue.js'
+        },
+        methods: {
+            greet: function(event) {
+                alert('Hello ' + this.name + "!")
+                if (event) {
+                    alert(event.target.tagName)
+                }
+            }
+        }
+    })
+
+    var app1 = new Vue({
+        el: '#app-1',
+        methods: {
+            say: function(message, event) {
+                alert(message)
+                alert(event.target.tagName)
+            }
+        }
+    })
+
+    var app2 = new Vue ({
+        el: '#app-2',
+        data: {
+            content: 'sad'
+        },
+        methods: {
+            show: function() {
+                alert(this.content)
+            }
+        }
+    })
+
+    var app3 = new Vue({
+        el: "#app-3",
+        methods: {
+            show: function() {
+                console.log('left click!')
+            }
+        }
+    })
+
+
+
+</script>

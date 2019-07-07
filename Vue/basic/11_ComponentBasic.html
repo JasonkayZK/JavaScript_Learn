@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script> -->
+</head>
+
+<body>
+    <div>
+        <div id="app-0">
+                <button-counter></button-counter>
+                <button-counter></button-counter>
+                <button-counter></button-counter>
+        </div>
+
+        <br/><br/>
+        <p>通过 Prop 向子组件传递数据</p>
+        <div id="app-1">
+            <blog-post title="niubi" content='haha'></blog-post>
+            <blog-post title="niubi2" content='haha2'></blog-post>
+        </div>
+
+        <br/><br/>
+        <p>v-bind动态传递props</p>
+        <div id="app-2">
+            <blog-post v-for="post in posts" :key="post.id" :title="post.title" :content="post.content"></blog-post>
+        </div>
+
+        <br/><br/>
+        <p>v-bind动态API传递props</p>
+        <div id="app-3">
+            <blog-post v-for="post in posts" :key="post.id" :title="post.title"></blog-post>
+            <button @click="apiCreate">API创建</button>
+        </div>
+
+        <br/><br/>
+        <p>单个根元素</p>
+        <div id="app-4">
+            <blog-post2 v-for="post in posts" :key="post.id" :post="post"></blog-post2>
+            <button @click="apiCreate">API创建</button>
+        </div>
+
+        <br/><br/>
+        <p>监听子组件事件</p>
+        <div id="app-5">
+            <div :style="{fontSize: postFontSize + 'em'}">
+                <blog-post3
+                    v-for="post in posts"
+                    :key="post.id"
+                    :post="post"
+                    @enlarge-text="postFontSize += 0.1"
+                ></blog-post3>
+            </div>
+        </div>
+
+        <br/><br/>
+        <p>使用事件抛出一个值</p>
+        <div id="app-6">
+            <div :style="{fontSize: postFontSize + 'em'}">
+                <blog-post4
+                    v-for="post in posts"
+                    :key="post.id"
+                    :post="post"
+                    @enlarge-text="postFontSize += $event"
+                ></blog-post4>
+            </div>
+        </div>
+
+        <br/><br/>
+        <p>在组件上使用 v-model</p>
+        <div id="app-7">
+            <custom-input v-model='searchText'></custom-input>
+            <p>{{searchText}}</p>
+        </div>
+
+        <br/><br/>
+        <p>通过插槽分发内容</p>    
+        <div id="app-8">
+            <alert-box>
+                (Slot-in)Something bad.
+            </alert-box>
+        </div>
+
+        <br/><br/>
+        <p>动态组件</p>    
+        <div id="app-9">
+
+        </div>
+    </div>
+    
+    <div id="dynamic-component-demo" class="demo">
+        <button
+            v-for="tab in tabs"
+            :key="tab"
+            :class="['tab-button, {active: currentTab === tab}']"
+            @click="currentTab = tab"
+        >{{tab}}</button>
+        <component
+            :is="currentTabComponent"
+            class="tab"
+        ></component>
+    </div>
+
+</body>
+
+<script>
+    Vue.component('tab-home', {
+        template: '<div>Home component</div>'
+    })
+    Vue.component('tab-posts', {
+        template: '<div>Posts component</div>'
+    })
+    Vue.component('tab-archive', {
+        template: '<div>Archive component</div>'
+    })
+
+    var demo1 = new Vue({
+        el: '#dynamic-component-demo',
+        data: {
+            currentTab: 'Home',
+            tabs: ['Home', 'Posts', 'Archive']
+        },
+        computed: {
+            currentTabComponent: function() {
+                return 'tab-' + this.currentTab.toLowerCase()
+            }
+        }
+    })
+
+</script>
+
+
+
+<style>
+.tab-button {
+  padding: 6px 10px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background: #f0f0f0;
+  margin-bottom: -1px;
+  margin-right: -1px;
+}
+.tab-button:hover {
+  background: #e0e0e0;
+}
+.tab-button.active {
+  background: #e0e0e0;
+}
+.tab {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+</style>
+
+<script>
+    Vue.component('button-counter', {
+        data: function() {
+            return {
+                count: 0
+            }
+        },
+        template: '<button @click="count++">You clicked me {{ count }} times.</button>'
+    })
+    var app0 = new Vue({el: '#app-0'})
+
+    Vue.component('blog-post', {
+        props: ['title', 'content'],
+        template: '<h3>{{title}} - {{content}}</h3>'
+    })
+    var app1 = new Vue({el: '#app-1'})
+
+    var app2 = new Vue({
+        el: '#app-2',
+        data: {
+            posts: [
+                {id: 1, title: 'a1', content: 'b1'},
+                {id: 2, title: 'a2', content: 'b2'},
+                {id: 3, title: 'a3', content: 'b3'},
+            ]
+        }
+    })
+
+    var app3 = new Vue({
+        el: '#app-3',
+        data: {
+            posts: []
+        },
+        methods: {
+            apiCreate: function() {
+                var vm = this
+                fetch('https://jsonplaceholder.typicode.com/posts')
+                .then(function (response) {
+                    return response.json()
+                })
+                .then(function(data) {
+                    vm.posts = data
+                })
+            }
+        }
+    })
+
+    Vue.component('blog-post2', {
+        props: ['post'],
+        template: `
+            <div class="blog-post2">
+                <h3>{{ post.title }}</h3>
+                <div v-html="post.content"></div>
+            </div>
+        `
+    })
+    var app4 = new Vue ({
+        el: '#app-4',
+        data: {
+            posts: []
+
+        },
+        methods: {
+            apiCreate: function() {
+                var vm = this
+                fetch('https://jsonplaceholder.typicode.com/posts')
+                .then(function (response) {
+                    return response.json()
+                })
+                .then(function(data) {
+                    vm.posts = data
+                })
+            }
+        }
+    })
+
+    Vue.component('blog-post3', {
+        props: ['post'],
+        template: `
+            <div class="blog-post3">
+                <h3>{{ post.title }}</h3>
+                <div v-html="post.content"></div>
+                <button @click="$emit('enlarge-text')">Enlarge text</button>
+            </div>
+        `
+    })
+    var app5 = new Vue({
+        el: '#app-5',
+        data: {
+            postFontSize: 1,
+            posts: [
+                {id: 1, title: 'a1', content: 'b1'},
+                {id: 2, title: 'a2', content: 'b2'},
+            ]
+        }
+    })
+
+    Vue.component('blog-post4', {
+        props: ['post'],
+        template: `
+            <div class="blog-post4">
+                <h3>{{ post.title }}</h3>
+                <div v-html="post.content"></div>
+                <button @click="$emit('enlarge-text', 0.5)">Enlarge text</button>
+            </div>
+        `        
+    })
+    var app6 = new Vue({
+        el: '#app-6',
+        data: {
+            postFontSize: 1,
+            posts: [
+                {id: 1, title: 'a1', content: 'b1'},
+                {id: 2, title: 'a2', content: 'b2'},
+            ]
+        }
+    })
+
+    Vue.component('custom-input', {
+        props: ['value'],
+        template: `
+            <input
+            v-bind:value="value"
+            v-on:input="$emit('input', $event.target.value)"
+            >
+        `        
+    })
+    var app7 = new Vue({
+        el: '#app-7',
+        data: {
+            searchText: 'hellp'
+        }
+    })
+
+    Vue.component('alert-box', {
+        template: `
+            <div class="demo-alert-box">
+                <strong>Error!</strong>
+                <slot></slot>
+            </div>
+        `        
+    })
+    var app8 = new Vue({el: '#app-8'})
+
+</script>
+
+
+

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script> -->
+</head>
+
+<body>
+    <p>后备内容</p>
+    <div id="app-0">
+        <submit-button></submit-button>
+    </div>
+
+    <br /><br />
+    <p>具名插槽</p>
+    <div id="app-1">
+        <base-layout>
+            <template v-slot:header>
+                <!-- <h1>Here might be a page title</h1> -->
+            </template>
+
+            <!-- <p>A paragraph for the main content.</p> -->
+            <!-- <p>And another one.</p> -->
+
+            <template v-slot:footer>
+                <!-- <p>Here's some contact info</p> -->
+            </template>
+        </base-layout>
+    </div>
+
+    <br /><br />
+    <p>作用域插槽</p>
+    <div id="app-2">
+        <child>
+            <template v-slot:test="slotProps">
+                <!-- {{slotProps.user.firstName}} -->
+            </template>
+        </child>
+    </div>
+
+    <br /><br />
+    <p>具名插槽的缩写</p>
+    <div id="app-3">
+        <base-layout>
+            <template #header></template>
+
+            <template #footer></template>
+        </base-layout>
+    </div>
+
+</body>
+
+<script>
+    Vue.component('submit-button', {
+        template: `
+            <button type="Submit">
+                <slot>Submit</slot>
+            </button>
+        `
+    })
+    var app0 = new Vue({el: '#app-0'})
+
+    Vue.component('base-layout', {
+        template: `
+            <div class="container">
+                <header>
+                    <slot name="header">Default Header</slot>
+                </header>
+                <main>
+                    <slot>Default main</slot>
+                </main>
+                <footer>
+                    <slot name="footer">Default Footer</slot>
+                </footer>
+            </div>
+        `
+    })
+    var app1 = new Vue({el: '#app-1'})
+
+    
+    Vue.component('child', {
+        data: function() {
+            return {
+                user: {
+                    firstName: 'first',
+                    lastName: 'last'
+                }
+            }
+        },
+        template: `
+            <span>
+                <slot name="test" v-bind:user="user">
+                    {{user.lastName}}
+                </slot>
+            </span>
+        `
+    })
+    var app2 = new Vue({el: '#app-2'})
+    
+    var app3 = new Vue({el: '#app-3'})
+
+
+
+
+</script>
+

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script> -->
+</head>
+
+<body>
+    <p>v-if展示</p>
+    <div id="app-0">
+        <h1 v-if="awesome">Vue is awesome!</h1>
+        <h1 v-else>Oh no</h1>
+    </div>
+
+    <br /><br />
+    <p>template上使用 v-if</p>
+    <div id="app-1">
+        <template v-if="ok">
+            <h1>Title</h1>
+            <p>Paragraph 1</p>
+            <p>Paragraph 2</p>
+        </template>
+    </div>
+
+    <br /><br />
+    <p>v-else展示</p>
+    <div id='app-2'>
+        <div v-if="random > 0.5">
+            Now you see me
+        </div>
+        <div v-else>
+            Now you don't
+        </div>
+    </div>
+
+    <br /><br />
+    <p>用 key 管理可复用的元素</p>
+    <div id="app-3">
+        <template v-if="loginType === 'username'">
+            <label>Username</label>
+            <input placeholder="Enter your name" />
+        </template>
+        <template v-else>
+            <label>Email</label>
+            <input placeholder="Enter email" />
+        </template>
+        <br /><button @click="changeType">Toggle login type</button>
+    </div>
+
+    <br /><br />
+    <p>用 key 不复用的元素</p>
+    <div id="app-4">
+        <template v-if="loginType === 'username'">
+            <label>Username</label>
+            <input placeholder="Enter username" key="username-input"/>
+        </template>
+        <template v-else>
+            <label>Email</label>
+            <input placeholder="Enter your email address" key="email-input">              
+        </template>
+        <br /><button @click="changeType">Toggle login type</button>
+    </div>
+    
+</body>
+
+<style>
+
+</style>
+
+<script>
+    var app0 = new Vue({
+        el: '#app-0',
+        data: {
+            awesome: false
+        }
+    })
+
+    var app1 = new Vue({
+        el: '#app-1',
+        data: {
+            ok: false
+        }
+    })
+
+    var app2 = new Vue({
+        el: '#app-2',
+        data: {
+            random: Math.random()
+        }
+    })
+
+    var app3 = new Vue({
+        el: '#app-3',
+        data: {
+            loginType: 'username'
+        },
+        methods: {
+            changeType: function() {
+                this.loginType = this.loginType === 'username' ? '' : 'username'
+            }
+        }
+    })
+
+    var app4 = new Vue({
+        el: '#app-4',
+        data: {
+            loginType: 'username'
+        },
+        methods: {
+            changeType: function() {
+                this.loginType = this.loginType === 'username' ? '' : 'username'
+            }
+        }
+    })
+
+
+</script>
+

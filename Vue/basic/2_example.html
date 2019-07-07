@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app-0">
+        <p>{{data.a}}</p>
+    </div>
+
+    <div id="app-1">
+        <p>{{obj.foo}}</p>
+        <button v-on:click="changeValue">Change it!</button>
+    </div>
+
+
+</body>
+
+<script>
+    var data = {a: 1}
+    var app0 = new Vue ({
+        el: '#app-0',
+        data: {
+            data
+        }
+    })
+
+    var obj= {
+        foo: 'bar'
+    }
+    Object.freeze(obj)
+    var app1 = new Vue({
+        el: '#app-1',
+        data: {
+            obj
+        },
+        methods: {
+            changeValue: function () {
+                this.obj.foo = new Date();
+            }
+        }
+    })
+
+
+
+
+
+</script>

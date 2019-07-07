@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+</head>
+<body>
+
+    <!-- 计算属性演示 -->
+    <div id="app-0">
+        <p>Original message: "{{message}}"</p>
+        <input v-model="message"/>
+        <p>Computed reversed message: "{{reversedMessage}}"</p>
+    </div>
+
+    <!-- 计算属性应用于watch -->
+    <div id="app-1">
+        {{fullName}}
+        <p>firstName: <input v-model="firstName" /></p>
+        <p>lastName: <input v-model="lastName" /></p>
+    </div>
+
+    <br /><br /><p>计算属性的setter</p>
+    <!-- 计算属性的setter -->
+    <div id="app-2">
+        <p>firstName: {{firstName}}</p>        
+        <p>firstName: <input v-model="firstName" /></p>
+        
+        <p>lastName: {{lastName}}</p>
+        <p>lastName: <input v-model="lastName" /></p>
+
+        <p>fullName: {{fullName}}</p>
+        <p>fullName: <input v-model="fullName" /></p>
+    </div>
+
+    <br /><br />
+    <!-- watch侦听器 -->
+    <div id="app-3">
+        <p>
+            Ask a yes/no question:
+            <input v-model="question">
+        </p>
+        <p>{{answer}}</p>
+    </div>
+
+</body>
+
+<script>
+    var app0 = new Vue({
+        el: "#app-0",
+        data: {
+            message: 'Hello'
+        },
+        computed: {
+            // computed函数作为getter函数
+            reversedMessage: function() {
+                return this.message.split('').reverse().join('')
+            }
+        }
+    })
+
+    var app1 = new Vue ({
+        el: '#app-1',
+        data: {
+            firstName: 'Foo',
+            lastName: 'Bar'
+        },
+        computed: {
+            fullName: function() {
+                return this.firstName + "  " + this.lastName
+            }
+        }
+    })
+
+    var app2 = new Vue({
+        el: '#app-2',
+        data: {
+            firstName: "Foo",
+            lastName: "Bar"
+        },
+        computed: {
+            fullName: {
+                get: function() {
+                    return this.firstName + '  ' + this.lastName
+                },
+                set: function(newValue) {
+                    var names = newValue.split('  ')
+                    this.firstName = names[0]
+                    this.lastName = names[names.length - 1]
+                }
+            }
+        }
+    })
+
+    var app3 = new Vue({
+        el: "#app-3",
+        data: {
+            question: '',
+            answer: 'I cannot give you an answer until you ask a question!'
+        },
+        watch: {
+            // 当question改变时调用方法
+            question: function(newQuestion, oldQuestion) {
+                this.answer = 'Waiting for you to stop typing...'
+                this.debouncedGetAnswer()
+            }
+        },
+        created: function() {
+            // `_.debounce` 是一个通过 Lodash 限制操作频率的函数。
+            // 在这个例子中，我们希望限制访问 yesno.wtf/api 的频率
+            // AJAX 请求直到用户输入完毕才会发出。想要了解更多关于
+            // `_.debounce` 函数 (及其近亲 `_.throttle`) 的知识，
+            // 请参考：https://lodash.com/docs#debounce         
+            this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
+        },
+        methods: {
+            getAnswer: function() {
+                if (this.question.indexOf('?') === -1) {
+                    this.answer = 'Questions usually contain a question mark. ;-)'              
+                    return
+                } 
+                this.answer = 'Think....'
+
+                var vm = this
+                axios.get('https://yesno.wtf/api')
+                .then(function(response) {
+                    vm.answer = _.capitalize(response.data.answer)
+                })
+                .catch(function(error) {
+                    vm.answer = 'Error! Could not reach the API. ' + error
+                })
+            }
+        }
+    })
+
+</script>

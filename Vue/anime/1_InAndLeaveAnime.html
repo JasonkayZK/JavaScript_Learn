@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script> -->
+</head>
+
+<body>
+    <div id="app-0">
+        <button @click="show = !show">
+            Toggle
+        </button>
+        <transition name="fade">
+            <p v-if="show">Hello</p>
+        </transition>
+    </div>
+
+</body>
+
+<style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+.fade-enter {
+    opacity: 0.5;
+}
+
+</style>
+
+<script>
+    var app0 = new Vue({
+        el: '#app-0',
+        data: {
+            show: true
+        }
+    })
+
+</script>

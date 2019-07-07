@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script> -->
+</head>
+
+<body>
+    <p>Prop 的大小写 (camelCase vs kebab-case)</p>
+    <div id="app-0">
+        <blog-post post-title="myTitle"></blog-post>
+    </div>
+
+    <br/><br/>
+    <p>prop类型/传递静态或动态 Prop</p>
+    <div id="app-1">
+        <comp-type title="Hi" :likes="2" :is-published="false"></comp-type>
+    </div>
+
+    
+
+
+</body>
+
+<script>
+    Vue.component('blog-post', {
+        props: ['postTitle'],
+        template: '<h3>{{postTitle}}</h3>'
+    })
+    var app0 = new Vue({el: '#app-0'})
+
+    Vue.component('comp-type', {
+        props: {
+            title: String,
+            likes: Number,
+            isPublished: Boolean,
+        },
+        template: `
+            <div class='comp-type'>
+                <p>{{title}} -{{likes}} - {{isPublished}} </p>
+            </div>
+        `
+    })
+    var app1 = new Vue({el: '#app-1',})
+
+
+
+</script>

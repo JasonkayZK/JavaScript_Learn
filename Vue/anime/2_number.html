@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script> -->
+</head>
+
+<body>
+    <div id="animated-number-demo">
+        <input v-model.number="number" type="number" step="20">
+        <p>{{animatedNumber}}</p>
+    </div>
+
+
+</body>
+
+<style>
+
+</style>
+
+<script>
+    new Vue({
+        el: '#animated-number-demo',
+        data: function() {
+            return {
+                number: 0,
+                tweenedNumber: 0
+            }
+        },
+        computed: {
+            animatedNumber: function() {
+                return this.tweenedNumber.toFixed(0);
+            }
+        },
+        watch: {
+            number: function(newValue) {
+                TweenLite.to(this.$data, 10., {tweenedNumber: newValue})
+            }
+        }
+    })
+
+</script>
+
+

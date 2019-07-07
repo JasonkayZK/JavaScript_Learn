@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script> -->
+</head>
+
+<body>
+    <p>自定义指令</p>
+    <div id="app-0">
+        <input v-focus />
+        <button v-focus>focus</button>
+    </div>
+    
+    <br/><br/>
+    <p>自定义钩子</p>
+    <div id="hook-arguments-example" v-demo:foo.a.b="message"></div>
+
+    <br/><br/>
+    <p>动态指令参数</p>
+    <div id="baseexample">
+        <p>Scroll down the page</p>
+        <p v-pin="200">Stick me 200px from the top of the page</p>
+    </div>
+
+    <br/><br/>
+    <p>动态指令参数2</p>
+    <div id="dynamicexample">
+        <h3>Scroll down inside this section ↓</h3>
+        <p v-pin2:[direction]="200">I am pinned onto the page at 200px to the left.</p>        
+    </div>
+
+
+</body>
+
+<script>
+    Vue.directive('focus', {
+        inserted: function(el) {
+            el.focus()
+        }
+    })
+    new Vue({el: '#app-0'})
+
+    Vue.directive('demo', {
+        bind: function(el, binding, vnode) {
+            var s = JSON.stringify
+            el.innerHTML =
+                'name: '       + s(binding.name) + '<br>' +
+                'value: '      + s(binding.value) + '<br>' +
+                'expression: ' + s(binding.expression) + '<br>' +
+                'argument: '   + s(binding.arg) + '<br>' +
+                'modifiers: '  + s(binding.modifiers) + '<br>' +
+                'vnode keys: ' + Object.keys(vnode).join(', ')            
+        }
+    })
+    new Vue({
+        el: '#hook-arguments-example',
+        data: {
+            message: 'hello!'
+        }
+    })
+
+    Vue.directive('pin', {
+        bind: function(el, binding, vnode) {
+            el.style.position = 'fixed'
+            el.style.top = binding.value + 'px'
+        },
+    })
+    new Vue({el: '#baseexample'})
+
+    Vue.directive('pin2', {
+        bind: function(el, binding, vnode) {
+            el.style.position = 'fixed'
+            var s = (binding.arg == 'left' ? 'left' : 'top')
+            el.style[s] = binding.value + 'px'  
+        }
+    })
+    new Vue({
+        el: "#dynamicexample",
+        data: function() {
+            return {
+                direction: 'left'
+            }
+        }
+    })
+
+
+</script>

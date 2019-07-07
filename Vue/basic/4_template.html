@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- v-once演示 -->
+    <div id="app-0">
+        <p v-once>这个值将不会改变{{msg}}</p>
+        <button v-on:click="change">点击按钮(不)改变</button>
+    </div>
+
+    <!-- v-html演示 -->
+    <div id="app-1">
+        <p>Using mustaches: {{rawHtml}}</p>
+        <p>Using v-html directive: <span v-html="rawHtml"></span></p>
+    </div>
+
+    <!-- v-bind演示1 -->
+    <div id="app-2">
+        <div v-bind:id="dynamicId">文字</div>
+        <button v-on:click="changeId">点击改变id</button>
+    </div>
+
+    <!-- v-bind演示2 -->
+    <div id="app-3">
+        <button v-bind:disabled="isButtonDisabled">Button</button>
+    </div>
+    
+    <!-- 动态参数演示 -->
+    <div id="app-4">
+        <a v-on:[eventName]="doSomething">Mode: {{mode}}</a>
+        <p><button v-on:click="change">点击更换Mode</button></p>
+    </div>
+
+    <!-- 修饰符演示 -->
+    <div id="app-5">
+        <form v-on:submit.prevent="onSubmit">
+            <input type="button" onclick="console.log('提交成功!')" value="Submit" />
+        </form>
+    </div>
+
+    <!-- 缩写演示 -->
+    <div id="app-6">
+        <p><a v-bind:href="url">v-bind:href 缩写: :href</a></p>
+        <button v-on:click="hello">v-on:click 缩写: @click</button>
+    </div>
+
+
+
+</body>
+
+<style>
+    #id1 {
+        font-size: 100px
+    }
+</style>
+
+
+<script>
+    var app0 = new Vue({
+        el: '#app-0',
+        data: {
+            msg: 'good!'
+        },
+        methods: {
+            change: function() {
+                this.msg = new Date()
+            }
+        }
+    })
+
+    var app1 = new Vue({
+        el: '#app-1',
+        data: {
+            rawHtml: '<span style="color:red">This should be red.</span>'
+        }
+    })
+
+    var app2 = new Vue({
+        el: '#app-2',
+        data: {
+            dynamicId: 'id1'
+        },
+        methods: {
+            changeId: function() {
+                this.dynamicId = this.dynamicId == 'id1' ? 'id2' : 'id1'
+            }
+        }
+    })
+    
+    var app3 = new Vue({
+        el: '#app-3',
+        data: {
+            isButtonDisabled: true
+        }
+    })
+
+    var app4 = new Vue({
+        el: '#app-4',
+        data: {
+            eventName: "click",
+            mode: 'nothing',
+        },
+        methods: {
+            doSomething: function() {
+                this.mode = new Date()
+            },
+            change: function() {
+                this.eventName = this.eventName === 'click' ? 'focus' : 'click'
+            }
+        }
+    })
+
+    var app6 = new Vue({
+        el: '#app-6',
+        data: {
+            url: "https://www.baidu.com/"
+        },
+        methods: {
+            hello: function() {
+                console.log("Hello!")
+            }
+        }
+    })
+
+</script>
