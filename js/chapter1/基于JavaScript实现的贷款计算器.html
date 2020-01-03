@@ -3,7 +3,7 @@
 
 <head>
     <title>JavaScript Loan Calculator</title>
-    <meta http-equiv="Content-Type" content="text/html" ; charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html" ; charset="utf-8"/>
     <style>
         /* 
                     计算结果为粗体
@@ -37,218 +37,222 @@
 </head>
 
 <body>
-    <table>
-        <tr>
-            <th>Enter Loan Data:</th>
-            <td></td>
-            <th>Loan Balance,Cumulative Equity,and Interest Payments</th>
-        </tr>
-        <tr>
-            <td>Amount of the Loan($):</td>
-            <td><input id="amount" onChange="calculate();"></td>
-            <td rowspan="8">
-                <canvas id="graph" width="400" height="250"></canvas>
-            </td>
-        </tr>
-        <tr>
-            <td>Annual interest(%):</td>
-            <td><input id="apr" onChange="calculate();"></td>
-        </tr>
-        <tr>
-            <td>Repayment period(years):</td>
-            <td><input id="years" onChange="calculate();"></td>
-        <tr>
-            <td>Zipcode(to find lenders):</td>
-            <td><input id="zipcode" onChange="calculate();"></td>
-        <tr>
-            <th>Approximate Payments:</th>
-            <td><button onClick="calculate();">Calculate</button></td>
-        </tr>
-        <tr>
-            <td>Monthly payment:</td>
-            <td>$<span class="output" id="payment"></span></td>
-        </tr>
-        <tr>
-            <td>Total payment:</td>
-            <td>$<span class="output" id="total"></span></td>
-        </tr>
-        <tr>
-            <td>Total interest:</td>
-            <td>$<span class="output" id="totalinterest"></span></td>
-        </tr>
-        <tr>
-            <th>Sponsors:</th>
-            <td colspan="2">Apply for your loan with one of these fine lenders:
-                <div id="lenders"></div>
-            </td>
-        </tr>
-        </tr>
-        </tr>
-    </table>
-    <script type="text/javascript">
-        function calculate() {
-            //查找文档中用于输入输出的元素
-            var amount = document.getElementById("amount");
-            var apr = document.getElementById("apr");
-            var years = document.getElementById("years");
-            var zipcode = document.getElementById("zipcode");
-            var payment = document.getElementById("payment");
-            var total = document.getElementById("total");
-            var totalinterest = document.getElementById("totalinterest");
+<table>
+    <tr>
+        <th>Enter Loan Data:</th>
+        <td></td>
+        <th>Loan Balance,Cumulative Equity,and Interest Payments</th>
+    </tr>
+    <tr>
+        <td>Amount of the Loan($):</td>
+        <td><input id="amount" onChange="calculate();"></td>
+        <td rowspan="8">
+            <canvas id="graph" width="400" height="250"></canvas>
+        </td>
+    </tr>
+    <tr>
+        <td>Annual interest(%):</td>
+        <td><input id="apr" onChange="calculate();"></td>
+    </tr>
+    <tr>
+        <td>Repayment period(years):</td>
+        <td><input id="years" onChange="calculate();"></td>
+    <tr>
+        <td>Zipcode(to find lenders):</td>
+        <td><input id="zipcode" onChange="calculate();"></td>
+    <tr>
+        <th>Approximate Payments:</th>
+        <td>
+            <button onClick="calculate();">Calculate</button>
+        </td>
+    </tr>
+    <tr>
+        <td>Monthly payment:</td>
+        <td>$<span class="output" id="payment"></span></td>
+    </tr>
+    <tr>
+        <td>Total payment:</td>
+        <td>$<span class="output" id="total"></span></td>
+    </tr>
+    <tr>
+        <td>Total interest:</td>
+        <td>$<span class="output" id="totalinterest"></span></td>
+    </tr>
+    <tr>
+        <th>Sponsors:</th>
+        <td colspan="2">Apply for your loan with one of these fine lenders:
+            <div id="lenders"></div>
+        </td>
+    </tr>
+    </tr>
+    </tr>
+</table>
+<script type="text/javascript">
+    function calculate() {
+        //查找文档中用于输入输出的元素
+        var amount = document.getElementById("amount");
+        var apr = document.getElementById("apr");
+        var years = document.getElementById("years");
+        var zipcode = document.getElementById("zipcode");
+        var payment = document.getElementById("payment");
+        var total = document.getElementById("total");
+        var totalinterest = document.getElementById("totalinterest");
 
-            //假设输入合法将从input元素中获取输入数据
-            //将百分比格式转换为小数格式，且从年利率转换为月利率
-            //将年度赔付转换为月度赔付
-            var principle = parseFloat(amount.value);
-            var interest = parseFloat(apr.value) / 100 / 12;
-            var payments = parseFloat(years.value) * 12;
+        //假设输入合法将从input元素中获取输入数据
+        //将百分比格式转换为小数格式，且从年利率转换为月利率
+        //将年度赔付转换为月度赔付
+        var principle = parseFloat(amount.value);
+        var interest = parseFloat(apr.value) / 100 / 12;
+        var payments = parseFloat(years.value) * 12;
 
-            var x = Math.pow(1 + interest, payments);
-            var monthly = (principle * x * interest) / (x - 1);
+        var x = Math.pow(1 + interest, payments);
+        var monthly = (principle * x * interest) / (x - 1);
 
-            //如果结果没有超过javascript能表示的数字范围，且用户的输入也正确
-            //这里所展示的结果就是合法的
-            if (isFinite(monthly)) {
-                //将数据填充至输出字段的位置，四舍五入到小数点后两位数字
-                payment.innerHTML = monthly.toFixed(2);
-                total.innerHTML = (monthly * payments).toFixed(2);
-                totalinterest.innerHTML = ((monthly * payments) - principle).toFixed(2);
+        //如果结果没有超过javascript能表示的数字范围，且用户的输入也正确
+        //这里所展示的结果就是合法的
+        if (isFinite(monthly)) {
+            //将数据填充至输出字段的位置，四舍五入到小数点后两位数字
+            payment.innerHTML = monthly.toFixed(2);
+            total.innerHTML = (monthly * payments).toFixed(2);
+            totalinterest.innerHTML = ((monthly * payments) - principle).toFixed(2);
 
-                //将用户数据保存下来，以便在下次访问时也能取到数据
-                save(amount.value, apr.value, years.value, zipcode.value);
-                try {
-                    getLenders(amount.value, apr.value, years.value, zipcode.value);
-                } catch (e) { }
-
-                //用图表展示贷款余额，利息和资产收益
-                chart(principle, interest, monthly, payments);
-            }
-            else {
-                //计算结果不是数字或者无穷大，意味着输入的数据是非法的或是不完整的
-                //清空之前的输出数据
-                payments.innerHTML = "";//清空元素的文本内容
-                total.innerHTML = ""
-                totalinterest.innerHTML = "";
-                chart();//不传参数就清空图表
+            //将用户数据保存下来，以便在下次访问时也能取到数据
+            save(amount.value, apr.value, years.value, zipcode.value);
+            try {
+                getLenders(amount.value, apr.value, years.value, zipcode.value);
+            } catch (e) {
             }
 
+            //用图表展示贷款余额，利息和资产收益
+            chart(principle, interest, monthly, payments);
+        } else {
+            //计算结果不是数字或者无穷大，意味着输入的数据是非法的或是不完整的
+            //清空之前的输出数据
+            payments.innerHTML = "";//清空元素的文本内容
+            total.innerHTML = ""
+            totalinterest.innerHTML = "";
+            chart();//不传参数就清空图表
         }
 
-        function save(amount, apr, years, zipcode) {
-            if (window.localStorage) {
-                localStorage.loan_amount = amount;
-                localStorage.loan_apr = apr;
-                localStorage.loan_years = years;
-                localStorage.loan_zipcode = zipcode;
-            }
+    }
+
+    function save(amount, apr, years, zipcode) {
+        if (window.localStorage) {
+            localStorage.loan_amount = amount;
+            localStorage.loan_apr = apr;
+            localStorage.loan_years = years;
+            localStorage.loan_zipcode = zipcode;
         }
+    }
 
-        window.onload = function () {
-            if (window.localStorage && localStorage.loan_amount) {
-                document.getElementById("amount").value = localStorage.loan_amount;
-                document.getElementById("apr").value = localStorage.loan_apr;
-                document.getElementById("years").value = localStorage.loan_years;
-                document.getElementById("zipcode").value = localStorage.loan_zipcode;
-            }
-        };
+    window.onload = function () {
+        if (window.localStorage && localStorage.loan_amount) {
+            document.getElementById("amount").value = localStorage.loan_amount;
+            document.getElementById("apr").value = localStorage.loan_apr;
+            document.getElementById("years").value = localStorage.loan_years;
+            document.getElementById("zipcode").value = localStorage.loan_zipcode;
+        }
+    };
 
-        function getLenders(amount, apr, years, zipcode) {
-            if (!window.XMLHttpRequest) return;
-            var ad = document.getElementById("lenders");
-            if (!ad) return;
-            var url = "getLenders.php" + "?amt=" + encodeURIComponent(amount) + "&apr=" + encodeURIComponent(apr) + "&yrs=" + encodeURIComponent(years) + "&zip=" + encodeURIComponent(zipcode);
+    function getLenders(amount, apr, years, zipcode) {
+        if (!window.XMLHttpRequest) return;
+        var ad = document.getElementById("lenders");
+        if (!ad) return;
+        var url = "getLenders.php" + "?amt=" + encodeURIComponent(amount) + "&apr=" + encodeURIComponent(apr) + "&yrs=" + encodeURIComponent(years) + "&zip=" + encodeURIComponent(zipcode);
 
-            //通过XMLHttpRequest对象来提取返回数据
-            var req = new XMLHttpRequest();
-            req.open("GET", url);
-            req.send(null);
+        //通过XMLHttpRequest对象来提取返回数据
+        var req = new XMLHttpRequest();
+        req.open("GET", url);
+        req.send(null);
 
-            req.onreadystatechange = function () {
-                if (req.readyState == 4 && req.status == 200) {
-                    var response = req.responseText;
-                    var lenders = JSON.parse(response);
-                    var list = "";
-                    for (var i = 0; i < lenders.length; i++) {
-                        list += "<li><a href='" + lenders[i].url + "'>" + lenders[i].name + "</a>";
-                    }
-                    ad.innerHTML = "<ul>" + list + "</ul>";
+        req.onreadystatechange = function () {
+            if (req.readyState == 4 && req.status == 200) {
+                var response = req.responseText;
+                var lenders = JSON.parse(response);
+                var list = "";
+                for (var i = 0; i < lenders.length; i++) {
+                    list += "<li><a href='" + lenders[i].url + "'>" + lenders[i].name + "</a>";
                 }
+                ad.innerHTML = "<ul>" + list + "</ul>";
             }
         }
+    }
 
-        function chart(principle, interest, monthly, payments) {
-            var graph = document.getElementById("graph");
-            graph.width = graph.width;//清除且重置画布
-            //若不传入参数，或浏览器不返回，则直接返回
-            if (arguments.length == 0 || !graph.getContext) return;
-            var g = graph.getContext("2d");
-            var width = graph.width,
-                height = graph.height;
+    function chart(principle, interest, monthly, payments) {
+        var graph = document.getElementById("graph");
+        graph.width = graph.width;//清除且重置画布
+        //若不传入参数，或浏览器不返回，则直接返回
+        if (arguments.length == 0 || !graph.getContext) return;
+        var g = graph.getContext("2d");
+        var width = graph.width,
+            height = graph.height;
 
-            function paymentToX(n) {
-                return n * width / payments;
-            }
-            function amountToY(a) {
-                return height - (a * height / (monthly * payments * 1.05));
-            }
-            g.moveTo(paymentToX(0), amountToY(0));
-            g.lineTo(paymentToX(payments), amountToY(payments * monthly));
-            g.lineTo(paymentToX(payments), amountToY(0));
-            g.closePath();
-            g.fillStyle = "#f88";
-            g.fill();
-            g.font = "12 bold sans-serif";
-            g.fillText("Total Interest Payment", 20, 20);
-
-            var equity = 0;
-            g.beginPath();
-            g.moveTo(paymentToX(0), amountToY(0));
-            for (var p = 1; p <= payments; p++) {
-                var thisMonthsInterest = (principle - equity) * interest;
-                equity += (monthly - thisMonthsInterest);
-                g.lineTo(paymentToX(p), amountToY(equity));
-            }
-            g.lineTo(paymentToX(payments), amountToY(0));
-            g.closePath();
-            g.fillStyle = "green";
-            g.fill();
-            g.fillText("Total Equity", 20, 35);
-
-            var bal = principle;
-            g.beginPath();
-            g.moveTo(paymentToX(0), amountToY(bal));
-            for (var p = 1; p <= payments; i++) {
-                var thisMonthsInterest = bal * interest;
-                bal -= (monthly - thisMonthsInterest);
-                g.lineTo(paymentToX(p), amountToY(bal));
-            }
-            g.lineWidth = 3;
-            g.stroke();
-            g.fillStyle = "black";
-            g.fillText("Loan Balance", 20, 50);
-
-            g.textAlign = "center";
-            var y = amountToY(0);
-            for (var year = 1; year * 12 <= payments; year++) {
-                var x = paymentToX(year * 12);
-                g.fillRect(x - 0.5, y - 3, 1, 3);
-                if (year == 1) g.fillText("Year", x, y - 5);
-                if (year % 5 == 0 && year * 12 !== payments)
-                    g.fillText(Sring(year), x, y - 5);
-            }
-
-            //将赔付的金额标记在右边界
-            g.textAlign = "right";//文字右对齐
-            g.textBaseline = "middle";//文字垂直对其
-            var ticks = [monthly * payments, principle];//所用的两个点
-            var rightEdge = paymentToX(payments);//设置X坐标
-            for (var i = 0; i < ticks.length; i++) {//对每两个大做循环
-                var y = amountToY(ticks[i]);//计算每个标记的Y轴坐标
-                g.fillRect(rightEdge - 3, y - 0.5, 3, 1);//绘制标记
-                g.fillText(String(ticks[i].toFixed(0)), rightEdge - 5, y);//绘制文本
-            }
+        function paymentToX(n) {
+            return n * width / payments;
         }
-    </script>
+
+        function amountToY(a) {
+            return height - (a * height / (monthly * payments * 1.05));
+        }
+
+        g.moveTo(paymentToX(0), amountToY(0));
+        g.lineTo(paymentToX(payments), amountToY(payments * monthly));
+        g.lineTo(paymentToX(payments), amountToY(0));
+        g.closePath();
+        g.fillStyle = "#f88";
+        g.fill();
+        g.font = "12 bold sans-serif";
+        g.fillText("Total Interest Payment", 20, 20);
+
+        var equity = 0;
+        g.beginPath();
+        g.moveTo(paymentToX(0), amountToY(0));
+        for (var p = 1; p <= payments; p++) {
+            var thisMonthsInterest = (principle - equity) * interest;
+            equity += (monthly - thisMonthsInterest);
+            g.lineTo(paymentToX(p), amountToY(equity));
+        }
+        g.lineTo(paymentToX(payments), amountToY(0));
+        g.closePath();
+        g.fillStyle = "green";
+        g.fill();
+        g.fillText("Total Equity", 20, 35);
+
+        var bal = principle;
+        g.beginPath();
+        g.moveTo(paymentToX(0), amountToY(bal));
+        for (var p = 1; p <= payments; i++) {
+            var thisMonthsInterest = bal * interest;
+            bal -= (monthly - thisMonthsInterest);
+            g.lineTo(paymentToX(p), amountToY(bal));
+        }
+        g.lineWidth = 3;
+        g.stroke();
+        g.fillStyle = "black";
+        g.fillText("Loan Balance", 20, 50);
+
+        g.textAlign = "center";
+        var y = amountToY(0);
+        for (var year = 1; year * 12 <= payments; year++) {
+            var x = paymentToX(year * 12);
+            g.fillRect(x - 0.5, y - 3, 1, 3);
+            if (year == 1) g.fillText("Year", x, y - 5);
+            if (year % 5 == 0 && year * 12 !== payments)
+                g.fillText(Sring(year), x, y - 5);
+        }
+
+        //将赔付的金额标记在右边界
+        g.textAlign = "right";//文字右对齐
+        g.textBaseline = "middle";//文字垂直对其
+        var ticks = [monthly * payments, principle];//所用的两个点
+        var rightEdge = paymentToX(payments);//设置X坐标
+        for (var i = 0; i < ticks.length; i++) {//对每两个大做循环
+            var y = amountToY(ticks[i]);//计算每个标记的Y轴坐标
+            g.fillRect(rightEdge - 3, y - 0.5, 3, 1);//绘制标记
+            g.fillText(String(ticks[i].toFixed(0)), rightEdge - 5, y);//绘制文本
+        }
+    }
+</script>
 </body>
 
 
